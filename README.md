@@ -35,13 +35,18 @@ request.
 ## Branches
 
 * Choose *short* and *descriptive* names:
+* Namespace your branches with your username
+
 
   ```shell
   # good
-  $ git checkout -b oauth-migration
+  $ git checkout -b rauhryan/oauth-migration
 
-  # bad - too vague
+  # bad - too vague, no namespace
   $ git checkout -b login_fix
+
+  # bad - no namespace
+  $ git checkout -b oauth-migration
   ```
 
 * Identifiers from corresponding tickets in an external service (eg. a GitHub

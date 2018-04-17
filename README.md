@@ -49,14 +49,6 @@ request.
   $ git checkout -b oauth-migration
   ```
 
-* Identifiers from corresponding tickets in an external service (eg. a GitHub
-  issue) are also good candidates for use in branch names. For example:
-
-  ```shell
-  # GitHub issue #15
-  $ git checkout -b issue-15
-  ```
-
 * Use *hyphens* to separate words.
 
 * When several people are working on the *same* feature, it might be convenient

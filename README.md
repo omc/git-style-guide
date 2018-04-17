@@ -37,7 +37,6 @@ request.
 * Choose *short* and *descriptive* names:
 * Namespace your branches with your username
 
-
   ```shell
   # good
   $ git checkout -b rauhryan/oauth-migration
@@ -51,14 +50,13 @@ request.
 
 * Use *hyphens* to separate words.
 
-* When several people are working on the *same* feature, it might be convenient
-  to have *personal* feature branches and a *team-wide* feature branch.
+* When several people are working on the *same* feature, use a *team-wide* feature branch.
   Use the following naming convention:
 
   ```shell
-  $ git checkout -b feature-a/master # team-wide branch
-  $ git checkout -b feature-a/maria  # Maria's personal branch
-  $ git checkout -b feature-a/nick   # Nick's personal branch
+  $ git checkout -b feature/oauth-migration # team-wide branch
+  $ git checkout -b feature/maria/oauth-migration  # Maria's personal branch
+  $ git checkout -b feature/nick/oauth-migration  # Nick's personal branch
   ```
 
   Merge at will the personal branches to the team-wide branch (see ["Merging"](#merging)).

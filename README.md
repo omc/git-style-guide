@@ -41,8 +41,11 @@ request.
   # good
   $ git checkout -b rauhryan/oauth-migration
 
-  # bad - too vague, no namespace
+  # bad - too vague, no namespace, uses underscores instead of hyphens
   $ git checkout -b login_fix
+
+  # bad - too vague
+  $ git checkout -b dan/css-fixes
 
   # bad - no namespace
   $ git checkout -b oauth-migration
@@ -54,13 +57,12 @@ request.
   Use the following naming convention:
 
   ```shell
-  $ git checkout -b feature/oauth-migration # team-wide branch
-  $ git checkout -b feature/maria/oauth-migration  # Maria's personal branch
-  $ git checkout -b feature/nick/oauth-migration  # Nick's personal branch
+  $ git checkout -b pairing/oauth-migration # team-wide branch
   ```
 
-  Merge at will the personal branches to the team-wide branch (see ["Merging"](#merging)).
-  Eventually, the team-wide branch will be merged to "master".
+  Merge at will to the team-wide branch (see ["Merging"](#merging)).
+  If you hit a can't fast-forward error, you should rebase your *local"* changes and push.
+  Team branches should *always* fast-forward merge.
 
 * Delete your branch from the upstream repository after it's merged, unless
   there is a specific reason not to.
@@ -72,7 +74,9 @@ request.
   $ git branch --merged | grep -v "\*"
   ```
 
-## Commits
+  See ["Closing GitHub PR's"](#github)
+
+## Commits 
 
 * Each commit should be a single *logical change*. Don't make several
   *logical changes* in one commit. For example, if a patch fixes a bug and
@@ -95,6 +99,10 @@ Note: While working alone on a local branch that *has not yet been pushed*, it's
 fine to use commits as temporary snapshots of your work. However, it still
 holds true that you should apply all of the above *before* pushing it.
 
+Note: The above is a general rule of thumb and a philosophical goal of good 
+commit and good commit messages, we are all human, but in general try to be
+kind to the next developer who is `#Gblame what is this?` 6 months from now?
+
 ### Messages
 
 * Use the editor, not the terminal, when writing a commit message:
@@ -113,7 +121,7 @@ holds true that you should apply all of the above *before* pushing it.
 
 * The summary line (ie. the first line of the message) should be
   *descriptive* yet *succinct*. Ideally, it should be no longer than
-  *50 characters*. It should be capitalized and written in imperative present
+  *72 characters*. It should be capitalized and written in imperative present
   tense. It should not end with a period since it is effectively the commit
   *title*:
 
@@ -134,7 +142,7 @@ holds true that you should apply all of the above *before* pushing it.
   corresponding issue in a bug tracker):
 
   ```text
-  Short (50 chars or fewer) summary of changes
+  Short (72 chars or fewer) summary of changes
 
   More detailed explanatory text, if necessary. Wrap it to
   72 characters. In some contexts, the first
@@ -153,24 +161,19 @@ holds true that you should apply all of the above *before* pushing it.
     between
 
   The pointers to your related resources can serve as a footer 
-  for your commit message. Here is an example that is referencing 
-  issues in a bug tracker:
+  for your commit message. 
   
-  Resolves: #56, #78
-  See also: #12, #34
+  Here is an example that is referencing issues in HelpScout:
+  
+  Context: https://secure.helpscout.net/conversation/564632389/11560/?folderId=478104v
 
-  Source http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
+  Here is an example that is referencing issues in Sentry.io:
+  
+  Context: https://sentry.io/omc/bonsai/issues/532169690/
   ```
 
   Ultimately, when writing a commit message, think about what you would need
   to know if you run across the commit in a year from now.
-
-* If a *commit A* depends on *commit B*, the dependency should be
-  stated in the message of *commit A*. Use the SHA1 when referring to
-  commits.
-
-  Similarly, if *commit A* solves a bug introduced by *commit B*, it should
-  also be stated in the message of *commit A*.
 
 * If a commit is going to be squashed to another commit use the `--squash` and
   `--fixup` flags respectively, in order to make the intention clear:
@@ -205,31 +208,42 @@ holds true that you should apply all of the above *before* pushing it.
     1. Make sure it conforms to the style guide and perform any needed actions
        if it doesn't (squash/reorder commits, reword messages etc.)
 
-    2. Rebase it onto the branch it's going to be merged to:
+    2. Merging your code into master should be done using the GitHub Merge Button™
 
-      ```shell
-      [my-branch] $ git fetch
-      [my-branch] $ git rebase origin/master
-      # then merge
-      ```
+* When dealing with *long lived branches* that need to be brought "up-to-date" with
+recent merges to the master branch. Prefer merging over rebasing if you have already
+pushed your branch to a remote or you have an open GitHub pull-request for your branch.
 
-      This results in a branch that can be applied directly to the end of the
-      "master" branch and results in a very simple history.
+   ```
+   # good - uses merge
+   $ git merge origin/master && git push
 
-      *(Note: This strategy is better suited for projects with short-running
-      branches. Otherwise it might be better to occassionally merge the
-      "master" branch instead of rebasing onto it.)*
+   # bad - uses rebase and requires a force push
+   $ git rebase origin/master && git push -f
 
-* If your branch includes more than one commit, do not merge with a
-  fast-forward:
+   ```
 
-  ```shell
-  # good - ensures that a merge commit is created
-  $ git merge --no-ff my-branch
+   In general this is to avoid force pushes onto code that has already been pushed to the
+   remote, if you've pushed something, we should be mindful that someone else on the team
+   may have pulled that code down and is in the process of collaborating with you. Collisions
+   are really hard to wrap your mind around.
 
-  # bad
-  $ git merge my-branch
-  ```
+   As a best practice, it's"OK" to fetch changes from GitHub and merge the lastest master branch
+   into your feature branch multiple times during the life cycle of your feature development.
+
+   ```
+   $ git fetch --all
+  
+   # notice that origin/master has changed
+
+   $ git merge origin/master
+   ```
+
+   The earlier you catch merge conflicts the easier they are to resolve
+
+## GitHub
+
+
 
 ## Misc.
 

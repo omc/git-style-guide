@@ -5,67 +5,46 @@ Kernel*](https://kernel.org/doc/html/latest/process/submitting-patches.html),
 the [git man pages](http://git-scm.com/doc) and various practices popular
 among the community.
 
-Translations are available in the following languages:
-
-* [Chinese (Simplified)](https://github.com/aseaday/git-style-guide)
-* [Chinese (Traditional)](https://github.com/JuanitoFatas/git-style-guide)
-* [French](https://github.com/pierreroth64/git-style-guide)
-* [German](https://github.com/runjak/git-style-guide)
-* [Greek](https://github.com/grigoria/git-style-guide)
-* [Japanese](https://github.com/objectx/git-style-guide)
-* [Korean](https://github.com/ikaruce/git-style-guide)
-* [Portuguese](https://github.com/guylhermetabosa/git-style-guide)
-* [Russian](https://github.com/alik0211/git-style-guide)
-* [Spanish](https://github.com/jeko2000/git-style-guide)
-* [Thai](https://github.com/zondezatera/git-style-guide)
-* [Turkish](https://github.com/CnytSntrk/git-style-guide)
-* [Ukrainian](https://github.com/denysdovhan/git-style-guide)
-
-If you feel like contributing, please do so! Fork the project and open a pull
-request.
-
 # Table of contents
 
 1. [Branches](#branches)
 2. [Commits](#commits)
   1. [Messages](#messages)
 3. [Merging](#merging)
+3. [GitHub](#github)
 4. [Misc.](#misc)
 
 ## Branches
 
 * Choose *short* and *descriptive* names:
+* Namespace your branches with your username
 
   ```shell
   # good
-  $ git checkout -b oauth-migration
+  $ git checkout -b rauhryan/oauth-migration
+
+  # bad - too vague, no namespace, uses underscores instead of hyphens
+  $ git checkout -b login_fix
 
   # bad - too vague
-  $ git checkout -b login_fix
-  ```
+  $ git checkout -b dan/css-fixes
 
-* Identifiers from corresponding tickets in an external service (eg. a GitHub
-  issue) are also good candidates for use in branch names. For example:
-
-  ```shell
-  # GitHub issue #15
-  $ git checkout -b issue-15
+  # bad - no namespace
+  $ git checkout -b oauth-migration
   ```
 
 * Use *hyphens* to separate words.
 
-* When several people are working on the *same* feature, it might be convenient
-  to have *personal* feature branches and a *team-wide* feature branch.
+* When several people are working on the *same* feature, use a *team-wide* feature branch.
   Use the following naming convention:
 
   ```shell
-  $ git checkout -b feature-a/master # team-wide branch
-  $ git checkout -b feature-a/maria  # Maria's personal branch
-  $ git checkout -b feature-a/nick   # Nick's personal branch
+  $ git checkout -b pairing/oauth-migration # team-wide branch
   ```
 
-  Merge at will the personal branches to the team-wide branch (see ["Merging"](#merging)).
-  Eventually, the team-wide branch will be merged to "master".
+  Merge at will to the team-wide branch (see ["Merging"](#merging)).
+  If you hit a can't fast-forward error, you should rebase your *local"* changes and push.
+  Team branches should *always* fast-forward merge.
 
 * Delete your branch from the upstream repository after it's merged, unless
   there is a specific reason not to.
@@ -77,7 +56,9 @@ request.
   $ git branch --merged | grep -v "\*"
   ```
 
-## Commits
+  See ["Closing GitHub PR's"](#github)
+
+## Commits 
 
 * Each commit should be a single *logical change*. Don't make several
   *logical changes* in one commit. For example, if a patch fixes a bug and
@@ -100,6 +81,10 @@ Note: While working alone on a local branch that *has not yet been pushed*, it's
 fine to use commits as temporary snapshots of your work. However, it still
 holds true that you should apply all of the above *before* pushing it.
 
+Note: The above is a general rule of thumb and a philosophical goal of good 
+commit and good commit messages, we are all human, but in general try to be
+kind to the next developer who is `#Gblame what is this?` 6 months from now?
+
 ### Messages
 
 * Use the editor, not the terminal, when writing a commit message:
@@ -118,7 +103,7 @@ holds true that you should apply all of the above *before* pushing it.
 
 * The summary line (ie. the first line of the message) should be
   *descriptive* yet *succinct*. Ideally, it should be no longer than
-  *50 characters*. It should be capitalized and written in imperative present
+  *72 characters*. It should be capitalized and written in imperative present
   tense. It should not end with a period since it is effectively the commit
   *title*:
 
@@ -139,7 +124,7 @@ holds true that you should apply all of the above *before* pushing it.
   corresponding issue in a bug tracker):
 
   ```text
-  Short (50 chars or fewer) summary of changes
+  Short (72 chars or fewer) summary of changes
 
   More detailed explanatory text, if necessary. Wrap it to
   72 characters. In some contexts, the first
@@ -158,24 +143,19 @@ holds true that you should apply all of the above *before* pushing it.
     between
 
   The pointers to your related resources can serve as a footer 
-  for your commit message. Here is an example that is referencing 
-  issues in a bug tracker:
+  for your commit message. 
   
-  Resolves: #56, #78
-  See also: #12, #34
+  Here is an example that is referencing issues in HelpScout:
+  
+  Context: https://secure.helpscout.net/conversation/564632389/11560/?folderId=478104v
 
-  Source http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
+  Here is an example that is referencing issues in Sentry.io:
+  
+  Context: https://sentry.io/omc/bonsai/issues/532169690/
   ```
 
   Ultimately, when writing a commit message, think about what you would need
   to know if you run across the commit in a year from now.
-
-* If a *commit A* depends on *commit B*, the dependency should be
-  stated in the message of *commit A*. Use the SHA1 when referring to
-  commits.
-
-  Similarly, if *commit A* solves a bug introduced by *commit B*, it should
-  also be stated in the message of *commit A*.
 
 * If a commit is going to be squashed to another commit use the `--squash` and
   `--fixup` flags respectively, in order to make the intention clear:
@@ -210,31 +190,186 @@ holds true that you should apply all of the above *before* pushing it.
     1. Make sure it conforms to the style guide and perform any needed actions
        if it doesn't (squash/reorder commits, reword messages etc.)
 
-    2. Rebase it onto the branch it's going to be merged to:
+    2. Merging your code into master should be done using the GitHub Merge Button™
 
-      ```shell
-      [my-branch] $ git fetch
-      [my-branch] $ git rebase origin/master
-      # then merge
-      ```
+* When dealing with *long lived branches* that need to be brought "up-to-date" with
+recent merges to the master branch. Prefer merging over rebasing if you have already
+pushed your branch to a remote or you have an open GitHub pull-request for your branch.
 
-      This results in a branch that can be applied directly to the end of the
-      "master" branch and results in a very simple history.
+   ```
+   # good - uses merge
+   $ git merge origin/master && git push
 
-      *(Note: This strategy is better suited for projects with short-running
-      branches. Otherwise it might be better to occassionally merge the
-      "master" branch instead of rebasing onto it.)*
+   # bad - uses rebase and requires a force push
+   $ git rebase origin/master && git push -f
 
-* If your branch includes more than one commit, do not merge with a
-  fast-forward:
+   ```
 
-  ```shell
-  # good - ensures that a merge commit is created
-  $ git merge --no-ff my-branch
+   In general this is to avoid force pushes onto code that has already been pushed to the
+   remote, if you've pushed something, we should be mindful that someone else on the team
+   may have pulled that code down and is in the process of collaborating with you. Collisions
+   are really hard to wrap your mind around.
 
-  # bad
-  $ git merge my-branch
+   As a best practice, it's"OK" to fetch changes from GitHub and merge the lastest master branch
+   into your feature branch multiple times during the life cycle of your feature development.
+
+   ```
+   $ git fetch --all
+  
+   # notice that origin/master has changed
+
+   $ git merge origin/master
+   ```
+
+   The earlier you catch merge conflicts the easier they are to resolve
+
+## GitHub
+
+### Pull Requests
+
+* Titles should be *descriptive* yet *succinct*. Ideally, it should be no longer
+  than *72 characters*. It should be capitalized and written in imperative present
+  tense.
+
+   ```
+   # good -
+   "Moves cluster usage polling into a background job"
+
+   # bad - too vague
+   "CSS updates"
+
+   # bad - past tense, too vague
+   "Fixed some broken tests"
+
+   ```
+
+* Pull request bodies should contain a brief explaination of *why*
+  the change is needed, *how* it addresses the issue and what *side-effects*
+  it might have.
+
+  It should also represent any dependencies with other GitHub issues or pull requests
+  using the GitHub Flavored Markdown syntax used to link issues together in GitHub:
+
+  It should also provide any pointers to related resources (eg. link to the
+  corresponding issues in GitHub or HelpScout):
+
+  ```text
+  Needs user/repo#123 #=> dependent on merging referenced PR
+  Closes #456 when merged #=> automatically closes issue when
+  merged and deployed
+  Related to user/repo#123 #=> Related to an other body of work
+
+  More detailed explanatory text, if necessary. Wrap it to
+  72 characters. In some contexts, the first
+  line is treated as the subject of an email and the rest of
+  the text as the body.  The blank line separating the
+  summary from the body is critical (unless you omit the body
+  entirely); tools like rebase can get confused if you run
+  the two together.
+
+  Further paragraphs come after blank lines.
+
+  - Bullet points are okay, too
+
+  - Use a hyphen or an asterisk for the bullet,
+    followed by a single space, with blank lines in
+    between
+
+  The pointers to your related resources can serve as a footer
+  for your commit message.
+
+  Here is an example that is referencing issues in HelpScout:
+
+  Context: https://secure.helpscout.net/conversation/564632389/11560/?folderId=478104v
+
+  Here is an example that is referencing issues in Sentry.io:
+
+  Context: https://sentry.io/omc/bonsai/issues/532169690/
   ```
+
+* It is helpful to give visual context when working on UI related tasks. When
+  possible it is nice to include before and after screenshots or the changes
+  the PR is applying.
+
+  When including screenshots, prefer comments over embedding them into the body field.
+
+  ```text
+  ## before
+  ![Alt text](http://via.placeholder.com/350x150?text=before)
+  ## after
+  ![Alt text](http://via.placeholder.com/350x150?text=after)
+  ```
+
+* Closing pull requests
+
+In general, only merge a pull request when all the automated checks are finished and successful. Unless its
+an emergency or otherwise nessasary, avoid merging pull requests without *at least one* approved code review
+from another teammate.
+
+Prefer using the GitHub UI and the Merge button when merging code into the default branch (master) over using
+merging your code manually with git. If you don't want to do that or consider yourself an expert terminal cow
+poke, merge using the `--no-ff` flag and include the pull request number in your commit message
+
+  ```
+  $ git merge rauhryan/weekly-performance-email --no-ff -m "Merging pull request #456"
+  ```
+
+This keeps context in the master branch with "merge bumps" that have nice url's that reference back to
+the pull request that merged in the feature/bug fix
+
+When working on long lived applications, context and git history is paramount to long term maintainability.
+This is nuanced and there are *grey-areas* and holy wars over merge vs rebase which are valid in contexts
+of maintaining open-source libraries where backward compatibility is important and semver is required.
+If there is no *good* reason to rewrite git history, closing pull requests with the "Create merge commit" option
+should *always* be prefered over *Squash and merge* and *Rebase and merge*
+
+In summary:
+
+  * Don't merge without someone else's eyeballs
+  * Wait till all the statuses are successfull
+  * Use the MergeButton with Create a merge commit
+
+### GitHub Issues
+
+[How to write a good bug report](http://testthewebforward.org/docs/bugs.html)
+
+A good GitHub issues should container the following:
+
+* Summary: The goal of summary is to make the report searchable and uniquely identifiable.
+
+  ```text
+  # bad
+  Drag crash
+
+  # good
+  Drag-selecting the table element on the clusters page crashes Chrome 49 on OSX 10.7
+  ```
+
+* A brief description of the issue with any related context that is useful
+
+* Steps to reproduce the problem
+
+  ```text
+  1. Load the attached testcase in Browser XYZ
+
+  2. Scroll to the bottom of the page
+
+  3. Click the link
+
+  4. Press tab to navigate links
+  ```
+
+* Expected results
+
+  Brief explaination of what the expected outcome of your steps to reproduce should have
+  been
+
+* Actual results
+
+  Brief explaination of what actually happens.
+
+  :+1: to include screenshots, stacktraces, error messages, or links
+  to Sentry errors or HelpScout tickets
 
 ## Misc.
 

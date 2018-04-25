@@ -5,31 +5,13 @@ Kernel*](https://kernel.org/doc/html/latest/process/submitting-patches.html),
 the [git man pages](http://git-scm.com/doc) and various practices popular
 among the community.
 
-Translations are available in the following languages:
-
-* [Chinese (Simplified)](https://github.com/aseaday/git-style-guide)
-* [Chinese (Traditional)](https://github.com/JuanitoFatas/git-style-guide)
-* [French](https://github.com/pierreroth64/git-style-guide)
-* [German](https://github.com/runjak/git-style-guide)
-* [Greek](https://github.com/grigoria/git-style-guide)
-* [Japanese](https://github.com/objectx/git-style-guide)
-* [Korean](https://github.com/ikaruce/git-style-guide)
-* [Portuguese](https://github.com/guylhermetabosa/git-style-guide)
-* [Russian](https://github.com/alik0211/git-style-guide)
-* [Spanish](https://github.com/jeko2000/git-style-guide)
-* [Thai](https://github.com/zondezatera/git-style-guide)
-* [Turkish](https://github.com/CnytSntrk/git-style-guide)
-* [Ukrainian](https://github.com/denysdovhan/git-style-guide)
-
-If you feel like contributing, please do so! Fork the project and open a pull
-request.
-
 # Table of contents
 
 1. [Branches](#branches)
 2. [Commits](#commits)
   1. [Messages](#messages)
 3. [Merging](#merging)
+3. [GitHub](#github)
 4. [Misc.](#misc)
 
 ## Branches
@@ -243,7 +225,122 @@ pushed your branch to a remote or you have an open GitHub pull-request for your 
 
 ## GitHub
 
+### Pull Requests
 
+* Titles should be *descriptive* yet *succinct*. Ideally, it should be no longer
+  than *72 characters*. It should be capitalized and written in imperative present
+  tense.
+
+   ```
+   # good -
+   "Moves cluster usage polling into a background job"
+
+   # bad - too vague
+   "CSS updates"
+
+   # bad - past tense, too vague
+   "Fixed some broken tests"
+
+   ```
+
+* Pull request bodies should contain a brief explaination of *why*
+  the change is needed, *how* it addresses the issue and what *side-effects*
+  it might have.
+
+  It should also represent any dependencies with other GitHub issues or pull requests
+  using the GitHub Flavored Markdown syntax used to link issues together in GitHub:
+
+  It should also provide any pointers to related resources (eg. link to the
+  corresponding issues in GitHub or HelpScout):
+
+  ```text
+  Needs user/repo#123 #=> dependent on merging referenced PR
+  Closes #456 when merged #=> automatically closes issue when
+  merged and deployed
+  Related to user/repo#123 #=> Related to an other body of work
+
+  More detailed explanatory text, if necessary. Wrap it to
+  72 characters. In some contexts, the first
+  line is treated as the subject of an email and the rest of
+  the text as the body.  The blank line separating the
+  summary from the body is critical (unless you omit the body
+  entirely); tools like rebase can get confused if you run
+  the two together.
+
+  Further paragraphs come after blank lines.
+
+  - Bullet points are okay, too
+
+  - Use a hyphen or an asterisk for the bullet,
+    followed by a single space, with blank lines in
+    between
+
+  The pointers to your related resources can serve as a footer
+  for your commit message.
+
+  Here is an example that is referencing issues in HelpScout:
+
+  Context: https://secure.helpscout.net/conversation/564632389/11560/?folderId=478104v
+
+  Here is an example that is referencing issues in Sentry.io:
+
+  Context: https://sentry.io/omc/bonsai/issues/532169690/
+  ```
+
+* It is helpful to give visual context when working on UI related tasks. When
+  possible it is nice to include before and after screenshots or the changes
+  the PR is applying.
+
+  When including screenshots, prefer comments over embedding them into the body field.
+
+  ```text
+  ## before
+  ![Alt text](http://via.placeholder.com/350x150?text=before)
+  ## after
+  ![Alt text](http://via.placeholder.com/350x150?text=after)
+  ```
+
+### GitHub Issues
+
+[How to write a good bug report](http://testthewebforward.org/docs/bugs.html)
+
+A good GitHub issues should container the following:
+
+* Summary: The goal of summary is to make the report searchable and uniquely identifiable.
+
+  ```text
+  # bad
+  Drag crash
+
+  # good
+  Drag-selecting the table element on the clusters page crashes Chrome 49 on OSX 10.7
+  ```
+
+* A brief description of the issue with any related context that is useful
+
+* Steps to reproduce the problem
+
+  ```text
+  1. Load the attached testcase in Browser XYZ
+
+  2. Scroll to the bottom of the page
+
+  3. Click the link
+
+  4. Press tab to navigate links
+  ```
+
+* Expected results
+
+  Brief explaination of what the expected outcome of your steps to reproduce should have
+  been
+
+* Actual results
+
+  Brief explaination of what actually happens.
+
+  :+1: to include screenshots, stacktraces, error messages, or links
+  to Sentry errors or HelpScout tickets
 
 ## Misc.
 

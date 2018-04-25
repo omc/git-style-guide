@@ -300,6 +300,35 @@ pushed your branch to a remote or you have an open GitHub pull-request for your 
   ![Alt text](http://via.placeholder.com/350x150?text=after)
   ```
 
+* Closing pull requests
+
+In general, only merge a pull request when all the automated checks are finished and successful. Unless its
+an emergency or otherwise nessasary, avoid merging pull requests without *at least one* approved code review
+from another teammate.
+
+Prefer using the GitHub UI and the Merge button when merging code into the default branch (master) over using
+merging your code manually with git. If you don't want to do that or consider yourself an expert terminal cow
+poke, merge using the `--no-ff` flag and include the pull request number in your commit message
+
+  ```
+  $ git merge rauhryan/weekly-performance-email --no-ff -m "Merging pull request #456"
+  ```
+
+This keeps context in the master branch with "merge bumps" that have nice url's that reference back to
+the pull request that merged in the feature/bug fix
+
+When working on long lived applications, context and git history is paramount to long term maintainability.
+This is nuanced and there are *grey-areas* and holy wars over merge vs rebase which are valid in contexts
+of maintaining open-source libraries where backward compatibility is important and semver is required.
+If there is no *good* reason to rewrite git history, closing pull requests with the "Create merge commit" option
+should *always* be prefered over *Squash and merge* and *Rebase and merge*
+
+In summary:
+
+  * Don't merge without someone else's eyeballs
+  * Wait till all the statuses are successfull
+  * Use the MergeButton with Create a merge commit
+
 ### GitHub Issues
 
 [How to write a good bug report](http://testthewebforward.org/docs/bugs.html)
